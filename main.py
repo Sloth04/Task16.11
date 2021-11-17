@@ -40,7 +40,6 @@ def mod(key, df):
 
 
 def main():
-    list_df = []
     cwd = os.path.dirname(os.path.abspath(__file__))
     target = os.path.join(cwd, "input", '*.xlsx')
     df = pd.read_excel(glob(target)[0], 0)
