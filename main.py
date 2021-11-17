@@ -29,15 +29,12 @@ owners = {'ПрАТ «Укргідроенерго» 62X5590123794668': ['DNIP1H
 
 
 def mod(key, df):
-    dict_df = {}
+    writer = pd.ExcelWriter(f'./output/{key}.xlsx', engine='xlsxwriter')
     for item in owners[key]:
         split_list = item.split()
         df_temp = df.loc[(df['Power plant'] == split_list[0]) & (df['Product type'] == split_list[1])]
         df_temp.loc[df_temp.index.min(), 'Total'] = df_temp['Deniushka'].sum()
-        dict_df[item] = df_temp
-    writer = pd.ExcelWriter(f'./output/{key}.xlsx', engine='xlsxwriter')
-    for item in dict_df.keys():
-        dict_df[item].to_excel(writer, sheet_name=item, index=False)
+        df_temp.to_excel(writer, sheet_name=item, index=False)
     writer.save()
     # print(dict_df)
 
