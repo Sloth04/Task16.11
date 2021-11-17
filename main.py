@@ -4,6 +4,8 @@ from glob import glob
 import os
 import xlsxwriter
 
+pd.options.mode.chained_assignment = None  # default='warn'
+
 owners = {'ПрАТ «Укргідроенерго» 62X5590123794668': ['DNIP1HPP аРВЧ_з', 'DNIP1HPP аРВЧ_с',
                                                      'SEREDHPP аРВЧ_з', 'SEREDHPP аРВЧ_с',
                                                      'KANIVHPP аРВЧ_з', 'KANIVHPP аРВЧ_с',
@@ -31,6 +33,7 @@ def mod(key, df):
     for item in owners[key]:
         split_list = item.split()
         df_temp = df.loc[(df['Power plant'] == split_list[0]) & (df['Product type'] == split_list[1])]
+        df_temp.loc[df_temp.index.min(), 'Total'] = df_temp['Deniushka'].sum()
         dict_df[item] = df_temp
     writer = pd.ExcelWriter(f'./output/{key}.xlsx', engine='xlsxwriter')
     for item in dict_df.keys():
