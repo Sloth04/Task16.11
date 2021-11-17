@@ -4,6 +4,7 @@ from glob import glob
 import os
 import xlsxwriter
 
+# why you use Product type in dictionary? Try to do that dynamic
 owners = {'ПрАТ «Укргідроенерго» 62X5590123794668': ['DNIP1HPP аРВЧ_з', 'DNIP1HPP аРВЧ_с',
                                                      'SEREDHPP аРВЧ_з', 'SEREDHPP аРВЧ_с',
                                                      'KANIVHPP аРВЧ_з', 'KANIVHPP аРВЧ_с',
@@ -31,7 +32,9 @@ def mod(key, df):
     for item in owners[key]:
         split_list = item.split()
         df_temp = df.loc[(df['Power plant'] == split_list[0]) & (df['Product type'] == split_list[1])]
+        # why you collect df in dict? you can sent direct to writer
         dict_df[item] = df_temp
+    # can you move writer above first loop and remove second loop? Something changed in that case?
     writer = pd.ExcelWriter(f'./output/{key}.xlsx', engine='xlsxwriter')
     for item in dict_df.keys():
         dict_df[item].to_excel(writer, sheet_name=item, index=False)
